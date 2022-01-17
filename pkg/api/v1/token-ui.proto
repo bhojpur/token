@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package v1;
+option go_package = "github.com/bhojpur/token/pkg/api/v1";
+import "token.proto";
+
+message ListEngineSpecsRequest{}
+
+message ListEngineSpecsResponse {
+    Repository repo = 1;
+    string name = 2;
+    string path = 3;
+    string description = 4;
+    repeated DesiredAnnotation arguments = 5;
+}
+
+// DesiredAnnotation describes an annotation a Engine should have
+message DesiredAnnotation {
+    string name = 1;
+    bool required = 2;
+    string description = 3;
+}
+
+message IsReadOnlyRequest {}
+
+message IsReadOnlyResponse {
+    bool readonly = 1;
+}
+
+// TokenUI offers services intended for the Bhojpur Token web user interface
+service TokenUI {
+    // ListEngineSpecs returns a list of Token Engine(s) that can be started through the UI.
+    rpc ListEngineSpecs(ListEngineSpecsRequest) returns (stream ListEngineSpecsResponse) {};
+
+    // IsReadOnly returns true if the UI is readonly.
+    rpc IsReadOnly(IsReadOnlyRequest) returns (IsReadOnlyResponse) {};
+}
